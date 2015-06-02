@@ -3,7 +3,12 @@
 </h4>
 <hr>
 <font color="red">
-<b>最新源代码托管在oschina &nbsp; <a href="http://git.oschina.net/zftlive/zftlive" target="_blank">点击这里</a>&nbsp; 获取最新源代码以及Sample预览效果apk</b>
+<b>最新源代码托管在oschina &nbsp; <a href="http://git.oschina.net/zftlive/zftlive" target="_blank">点击这里</a>&nbsp; 获取最新源代码以及Sample预览效果apk<br><br>
+===========================201506优化变更================================<br><br>
+最近抽空优化了zftlive，将共通的基类、工具类、自定义控件以及资源文件按照命名规范抽取<a href="http://git.oschina.net/zftlive/AjavaAndroidLib" target="_blank">类库</a>和<a href="http://git.oschina.net/zftlive/AjavaAndroidSample" target="_blank">样例</a>，目的是方便后续维护以及开发者使用。另外针对zftlive集成的第三方jar罗列了一个清单，开发者可以根据自己的需要删减对于的jar，开发者可以以类库引用或者导入<a href="http://git.oschina.net/zftlive/AjavaAndroidLib/tree/master/doc" target="_blank">发布jar/res</a>形式开发自己的APP，并粗略整理了安卓实际项目开发中的<a href="http://git.oschina.net/zftlive/AjavaAndroidLib/tree/master/doc" target="_blank">架构雏形/命名规范以及注意事项</a>
+<br>
+</b>
+
 </font>
 <hr>
 <h3>已集成第三方开源组件：</h3>
