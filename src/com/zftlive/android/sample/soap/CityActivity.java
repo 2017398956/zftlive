@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -14,9 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.zftlive.android.R;
-import com.zftlive.android.base.BaseActivity;
-import com.zftlive.android.tools.ToolAlert;
-import com.zftlive.android.tools.ToolSOAP;
+import com.zftlive.android.library.base.BaseActivity;
+import com.zftlive.android.library.common.ActionBarManager;
+import com.zftlive.android.library.tools.ToolAlert;
+import com.zftlive.android.library.tools.ToolSOAP;
 
 /**
  * 调用WebService接口获取省份对应的城市Activity
@@ -35,7 +38,18 @@ public class CityActivity extends BaseActivity {
 	public int bindLayout() {
 		return R.layout.activity_soap_provice_city;
 	}
+	
+	@Override
+	public View bindView() {
+		return null;
+	}
 
+	@Override
+	public void initParms(Bundle parms) {
+		
+	}
+	
+	@SuppressLint("NewApi")
 	@Override
 	public void initView(View view) {
 		mCityListView = (ListView) findViewById(R.id.province_list);
@@ -47,13 +61,16 @@ public class CityActivity extends BaseActivity {
 				getOperation().forward(WeatherActivity.class);
 			}
 		});
+		
+		//初始化带返回按钮的标题栏
+		ActionBarManager.initBackTitle(getContext(), getActionBar(), "城市列表");
 	}
 
 	@Override
 	public void doBusiness(final Context mContext) {
 		
 		//等待对话框
-		ToolAlert.showLoading(this, "数据加载中...");
+		ToolAlert.loading(this, "数据加载中...");
 		
 		//添加参数
 		HashMap<String, String> properties = new HashMap<String, String>();
@@ -69,7 +86,7 @@ public class CityActivity extends BaseActivity {
 					citysList = parseSoapObject(result);
 					mCityListView.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, citysList));
 				}else{
-					ToolAlert.showShort(mContext, "呼叫WebService-->getSupportCity失败");
+					ToolAlert.toastShort(mContext, "呼叫WebService-->getSupportCity失败");
 				}
 			}
 
@@ -78,7 +95,7 @@ public class CityActivity extends BaseActivity {
 				//关闭等待对话框
 				ToolAlert.closeLoading();
 				
-				ToolAlert.showShort(mContext, "呼叫WebService-->getSupportProvince失败，原因："+result);
+				ToolAlert.toastShort(mContext, "呼叫WebService-->getSupportProvince失败，原因："+result);
 			}
 		});
 	}

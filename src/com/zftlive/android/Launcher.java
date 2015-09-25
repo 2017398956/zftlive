@@ -1,12 +1,13 @@
 package com.zftlive.android;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 
-import com.zftlive.android.base.BaseActivity;
+import com.zftlive.android.library.base.BaseActivity;
 import com.zftlive.android.sample.MainActivity;
 
 /**
@@ -20,6 +21,16 @@ public class Launcher extends BaseActivity {
 	@Override
 	public int bindLayout() {
 		return R.layout.activity_launcher;
+	}
+	
+	@Override
+	public View bindView() {
+		return null;
+	}
+
+	@Override
+	public void initParms(Bundle parms) {
+		
 	}
 
 	@Override
@@ -48,9 +59,9 @@ public class Launcher extends BaseActivity {
 				//右往左推出效果
 //				overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
 				//转动淡出效果1
-//				overridePendingTransition(R.anim.scale_rotate_in,R.anim.alpha_out);
+				overridePendingTransition(R.anim.scale_rotate_in,R.anim.alpha_out);
 				//下往上推出效果
-				overridePendingTransition(R.anim.push_up_in,R.anim.push_up_out);
+//				overridePendingTransition(R.anim.push_up_in,R.anim.push_up_out);
 			}
 		});
 		view.setAnimation(animation);

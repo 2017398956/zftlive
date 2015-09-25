@@ -1,10 +1,9 @@
 package com.zftlive.android.sample.zxing;
 
-import java.util.UUID;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -12,10 +11,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.zftlive.android.R;
-import com.zftlive.android.base.BaseActivity;
-import com.zftlive.android.tools.ToolAlert;
-import com.zftlive.android.tools.ToolFile;
-import com.zftlive.android.tools.ToolPicture;
+import com.zftlive.android.library.base.BaseActivity;
+import com.zftlive.android.library.common.ActionBarManager;
+import com.zftlive.android.library.tools.ToolAlert;
+import com.zftlive.android.library.tools.ToolFile;
+import com.zftlive.android.library.tools.ToolPicture;
+import com.zftlive.android.library.tools.ToolString;
 
 /**
  * 生成二维码示例
@@ -35,7 +36,18 @@ public class ZxingGenBinActivity extends BaseActivity {
 	public int bindLayout() {
 		return R.layout.activity_gen_qr_image;
 	}
+	
+	@Override
+	public View bindView() {
+		return null;
+	}
 
+	@Override
+	public void initParms(Bundle parms) {
+		
+	}
+	
+	@SuppressLint("NewApi")
 	@Override
 	public void initView(View view) {
 		et_qr_text = (EditText)findViewById(R.id.et_qr_text);
@@ -43,13 +55,17 @@ public class ZxingGenBinActivity extends BaseActivity {
 		btn_make_bar = (Button)findViewById(R.id.btn_make_bar);
 		qr_image = (ImageView)findViewById(R.id.qr_image);
 		validate_image = (ImageView)findViewById(R.id.validate_image);
+		
+		//初始化带返回按钮的标题栏
+		String strCenterTitle = getResources().getString(R.string.ZxingGenBinActivity);
+		ActionBarManager.initBackTitle(getContext(), getActionBar(), strCenterTitle);
 	}
 
 	@Override
 	public void doBusiness(Context mContext) {
 		//初始化值
 		if("".equals(et_qr_text.getText().toString())){
-			et_qr_text.setText("http://zftlive.qiniudn.com/Android360UI.zip");
+			et_qr_text.setText("http://a.app.qq.com/o/simple.jsp?pkgname=com.zftlive.android");
 		}
 		
 		btn_make_qr.setOnClickListener(new OnClickListener() {
@@ -58,7 +74,7 @@ public class ZxingGenBinActivity extends BaseActivity {
 				
 				try {
 					if("".equals(et_qr_text.getText().toString())){
-						ToolAlert.showShort("请输入要生成二维码内容！");
+						ToolAlert.toastShort("请输入要生成二维码内容！");
 						return ;
 					}
 					
@@ -70,16 +86,16 @@ public class ZxingGenBinActivity extends BaseActivity {
 						qrImage = null;
 					}
 					
-				    qrImage = ToolPicture.makeQRImage(et_qr_text.getText().toString(), 200, 200);
+				    qrImage = ToolPicture.makeQRImage(et_qr_text.getText().toString(), 400, 400);
 					qr_image.setImageBitmap(qrImage);
 					
 					//生成图片
-					String filePath = ToolFile.gainSDCardPath() + "/MyLive/QRImage/"+UUID.randomUUID().toString()+".jpg";
+					String filePath = ToolFile.gainSDCardPath() + "/MyLive/QRImage/"+ToolString.gainUUID()+".jpg";
 					ToolFile.saveAsJPEG(qrImage, filePath);
 					
 					getOperation().closeLoading();
 					
-					ToolAlert.showShort("二维码已经保存在："+filePath);
+					ToolAlert.toastShort("二维码已经保存在："+filePath);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -105,7 +121,7 @@ public class ZxingGenBinActivity extends BaseActivity {
 				    validateCodeImage = ToolPicture.makeValidateCode(200, 30);
 				    validate_image.setImageBitmap(validateCodeImage);
 					
-					ToolAlert.showShort("验证码值："+ToolPicture.gainValidateCodeValue());
+					ToolAlert.toastShort("验证码值："+ToolPicture.gainValidateCodeValue());
 					
 					getOperation().closeLoading();
 					

@@ -13,7 +13,6 @@
     <color name="papayawhip">#FFEFD5</color><!--番木色 -->
     <color name="blanchedalmond">#FFEBCD</color><!--白杏色 -->
     <color name="mistyrose">#FFE4E1</color><!--浅玫瑰色 -->
-    <color name="text_color">#717171</color><!--浅玫瑰色 -->
     <color name="bisque">#FFE4C4</color><!--桔黄色 -->
     <color name="moccasin">#FFE4B5</color><!--鹿皮色 -->
     <color name="navajowhite">#FFDEAD</color><!--纳瓦白 -->
@@ -148,4 +147,5 @@
     <color name="darkblue">#00008B</color><!--暗蓝色 -->
     <color name="navy">#000080</color><!--海军色 -->
     <color name="black">#000000</color><!--黑色 -->
+    <color name="black_alpha">#70000000</color><!--黑色 -->
 </resources>

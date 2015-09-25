@@ -4,14 +4,17 @@ import java.util.HashMap;
 
 import org.ksoap2.serialization.SoapObject;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.zftlive.android.R;
-import com.zftlive.android.base.BaseActivity;
-import com.zftlive.android.tools.ToolAlert;
-import com.zftlive.android.tools.ToolSOAP;
+import com.zftlive.android.library.base.BaseActivity;
+import com.zftlive.android.library.common.ActionBarManager;
+import com.zftlive.android.library.tools.ToolAlert;
+import com.zftlive.android.library.tools.ToolSOAP;
 
 /**
  * 调用WebService接口获取天气信息Activity
@@ -27,16 +30,29 @@ public class WeatherActivity extends BaseActivity{
 	public int bindLayout() {
 		return R.layout.activity_soap_weather;
 	}
+	
+	@Override
+	public View bindView() {
+		return null;
+	}
 
+	@Override
+	public void initParms(Bundle parms) {
+		
+	}
+	
+	@SuppressLint("NewApi")
 	@Override
 	public void initView(View view) {
 		mTextWeather = (TextView) findViewById(R.id.weather);
+		//初始化带返回按钮的标题栏
+		ActionBarManager.initBackTitle(getContext(), getActionBar(), "天气信息");
 	}
 
 	@Override
 	public void doBusiness(final Context mContext) {
 		//等待对话框
-		ToolAlert.showLoading(mContext, "数据加载中...");
+		ToolAlert.loading(mContext, "数据加载中...");
 		
 		HashMap<String, String> properties = new HashMap<String, String>();
 		properties.put("theCityName", String.valueOf(getOperation().getParameters("city")));
@@ -55,7 +71,7 @@ public class WeatherActivity extends BaseActivity{
 					}
 					mTextWeather.setText(sb.toString());
 				}else{
-					ToolAlert.showShort(mContext, "呼叫WebService-->getWeatherbyCityName失败");
+					ToolAlert.toastShort(mContext, "呼叫WebService-->getWeatherbyCityName失败");
 				}
 			}
 
@@ -64,7 +80,7 @@ public class WeatherActivity extends BaseActivity{
 				//关闭等待对话框
 				ToolAlert.closeLoading();
 				
-				ToolAlert.showShort(mContext, "呼叫WebService-->getWeatherbyCityName失败，原因："+result);
+				ToolAlert.toastShort(mContext, "呼叫WebService-->getWeatherbyCityName失败，原因："+result);
 			}
 		});
 	}

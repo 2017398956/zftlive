@@ -3,17 +3,26 @@ package com.zftlive.android.sample.sms;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import cn.smssdk.SMSSDK;
 
 import com.zftlive.android.R;
-import com.zftlive.android.base.BaseActivity;
-import com.zftlive.android.tools.ToolAlert;
-import com.zftlive.android.tools.ToolSMS;
+import com.zftlive.android.library.MApplication;
+import com.zftlive.android.library.base.BaseActivity;
+import com.zftlive.android.library.common.ActionBarManager;
+import com.zftlive.android.library.tools.ToolAlert;
+import com.zftlive.android.library.tools.ToolString;
+import com.zftlive.android.library.tools.sms.SMSReceiver;
+import com.zftlive.android.library.tools.sms.ToolSMS;
 
 
 /**
@@ -32,25 +41,41 @@ public class PhoneValidateCodeActivity extends BaseActivity {
 	private static int period = 1 * 1000;  //1s
 	private static int count = 60;  
 	private static final int UPDATE_TEXTVIEW = 99;
+	private BroadcastReceiver smsReceiver;
 	
 	@Override
 	public int bindLayout() {
 		return R.layout.activity_phonevalidate_code;
 	}
+	
+	@Override
+	public View bindView() {
+		return null;
+	}
 
+	@Override
+	public void initParms(Bundle parms) {
+		
+	}
+	
+	@SuppressLint("NewApi")
 	@Override
 	public void initView(View view) {
 		et_phone = (EditText)findViewById(R.id.et_phone);
 		et_phone_code = (EditText)findViewById(R.id.et_phone_code);
 		btn_gain_smscode = (Button)findViewById(R.id.btn_gain_smscode);
 		btn_validate = (Button)findViewById(R.id.btn_validate);
+		
+		//初始化带返回按钮的标题栏
+		String strCenterTitle = getResources().getString(R.string.PhoneValidateCodeActivity);
+		ActionBarManager.initBackTitle(getContext(), getActionBar(), strCenterTitle);
 	}
 
 	@Override
-	public void doBusiness(Context mContext) {
+	public void doBusiness(final Context mContext) {
 		
-		//注册SMSDK
-		ToolSMS.initSDK(ToolSMS.APPKEY, ToolSMS.APPSECRET);
+		//注册SMSDK，可放置Application
+		ToolSMS.initSDK("843e7d4ff9a9", "f2eabd82678cdf3ad78aa3e5f726b3f8");
 		
 		//验证不可用
 		et_phone_code.setEnabled(false);
@@ -63,11 +88,16 @@ public class PhoneValidateCodeActivity extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
-				if(et_phone.getText().toString() != ""){
-					ToolSMS.getVerificationCode(et_phone.getText().toString());
-					startTimer();
+				if(ToolString.isNoBlankAndNoNull(et_phone.getText().toString().trim())){
+					if(((MApplication)getApplicationContext()).isNetworkReady()){
+						ToolSMS.getVerificationCode(et_phone.getText().toString());
+						startTimer();
+					}else{
+						ToolAlert.toastShort(mContext, "请先开启网络测试");
+					}
+					
 				}else{
-					ToolAlert.showShort("请输入大陆的手机号码");
+					ToolAlert.toastShort("请输入大陆的手机号码");
 				}
 			}
 		});
@@ -82,21 +112,38 @@ public class PhoneValidateCodeActivity extends BaseActivity {
 						
 						@Override
 						public void onSucced() {
-							ToolAlert.showShort(PhoneValidateCodeActivity.this, "验证成功");
+							ToolAlert.toastShort(PhoneValidateCodeActivity.this, "验证成功");
 							//释放监听器
 							ToolSMS.release();
 						}
 						
 						@Override
 						public void onFailed(Throwable e) {
-							ToolAlert.showShort(PhoneValidateCodeActivity.this, "验证失败，原因："+e.getMessage());
+							ToolAlert.toastShort(PhoneValidateCodeActivity.this, "验证失败，原因："+e.getMessage());
 						}
 					});
 				}else{
-					ToolAlert.showShort("请输入手机验证码");
+					ToolAlert.toastShort("请输入手机验证码");
 				}
 			}
 		});
+		
+		//自动读取验证码
+		smsReceiver = new SMSReceiver(new SMSSDK.VerifyCodeReadListener(){
+
+			@Override
+			public void onReadVerifyCode(final String verifyCode) {
+				
+				getContext().runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						et_phone_code.setText(verifyCode);
+					}
+				});
+			}
+		});
+		getContext().registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 		
 	}
 
@@ -107,7 +154,7 @@ public class PhoneValidateCodeActivity extends BaseActivity {
 
 	@Override
 	public void destroy() {
-		
+		unregisterReceiver(smsReceiver);
 	}
 	
 	/**

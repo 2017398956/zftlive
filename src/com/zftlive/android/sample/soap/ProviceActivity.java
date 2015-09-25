@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -13,9 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.zftlive.android.R;
-import com.zftlive.android.base.BaseActivity;
-import com.zftlive.android.tools.ToolAlert;
-import com.zftlive.android.tools.ToolSOAP;
+import com.zftlive.android.library.base.BaseActivity;
+import com.zftlive.android.library.common.ActionBarManager;
+import com.zftlive.android.library.tools.ToolAlert;
+import com.zftlive.android.library.tools.ToolSOAP;
 
 
 /**
@@ -39,7 +42,18 @@ public class ProviceActivity extends BaseActivity {
 	public int bindLayout() {
 		return R.layout.activity_soap_provice_city;
 	}
+	
+	@Override
+	public View bindView() {
+		return null;
+	}
 
+	@Override
+	public void initParms(Bundle parms) {
+		
+	}
+	
+	@SuppressLint("NewApi")
 	@Override
 	public void initView(View view) {
 		mProvinceList = (ListView) findViewById(R.id.province_list);
@@ -52,12 +66,14 @@ public class ProviceActivity extends BaseActivity {
 			}
 		});
 		
+		//初始化带返回按钮的标题栏
+		ActionBarManager.initBackTitle(getContext(), getActionBar(), "省份列表");
 	}
 
 	@Override
 	public void doBusiness(final Context mContext) {
 		//等待对话框
-		ToolAlert.showLoading(this, "数据加载中...");
+		ToolAlert.loading(this, "数据加载中...");
 		
 		//呼叫WebService接口
 		ToolSOAP.callService(ProviceActivity.WEB_SERVER_URL,ProviceActivity.NAME_SPACE,"getSupportProvince", null, new ToolSOAP.WebServiceCallBack() {
@@ -71,7 +87,7 @@ public class ProviceActivity extends BaseActivity {
 					provinceList = parseSoapObject(result);
 					mProvinceList.setAdapter(new ArrayAdapter<String>(ProviceActivity.this, android.R.layout.simple_list_item_1, provinceList));
 				}else{
-					ToolAlert.showShort(mContext, "呼叫WebService-->getSupportProvince失败");
+					ToolAlert.toastShort(mContext, "呼叫WebService-->getSupportProvince失败");
 				}
 			}
 
@@ -80,7 +96,7 @@ public class ProviceActivity extends BaseActivity {
 				//关闭等待对话框
 				ToolAlert.closeLoading();
 				
-				ToolAlert.showShort(mContext, "呼叫WebService-->getSupportProvince失败，原因："+result);
+				ToolAlert.toastShort(mContext, "呼叫WebService-->getSupportProvince失败，原因："+result);
 			}
 		});
 	}

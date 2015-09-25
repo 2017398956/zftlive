@@ -4,8 +4,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +18,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.j256.ormlite.android.AndroidDatabaseConnection;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.QueryBuilder;
 import com.zftlive.android.R;
-import com.zftlive.android.base.BaseActivity;
-import com.zftlive.android.base.BaseAdapter;
+import com.zftlive.android.library.base.BaseActivity;
+import com.zftlive.android.library.base.BaseMAdapter;
+import com.zftlive.android.library.common.ActionBarManager;
+import com.zftlive.android.library.third.ormlite.android.AndroidDatabaseConnection;
+import com.zftlive.android.library.third.ormlite.dao.Dao;
+import com.zftlive.android.library.third.ormlite.stmt.QueryBuilder;
+import com.zftlive.android.library.tools.ToolAlert;
+import com.zftlive.android.library.tools.ToolDatabase;
+import com.zftlive.android.library.tools.ToolString;
 import com.zftlive.android.sample.db.entity.User;
-import com.zftlive.android.tools.ToolAlert;
-import com.zftlive.android.tools.ToolDatabase;
-import com.zftlive.android.tools.ToolString;
 
 /**
  * 数据库操作示例
@@ -50,7 +53,18 @@ public class DBDemoActivity extends BaseActivity {
 	public int bindLayout() {
 		return R.layout.activity_db_demo;
 	}
+	
+	@Override
+	public View bindView() {
+		return null;
+	}
 
+	@Override
+	public void initParms(Bundle parms) {
+		
+	}
+	
+	@SuppressLint("NewApi")
 	@Override
 	public void initView(View view) {
 		et_username = (EditText) findViewById(R.id.et_username);
@@ -67,6 +81,10 @@ public class DBDemoActivity extends BaseActivity {
 		btn_end_page = (Button) findViewById(R.id.btn_end_page);
 
 		lv_userlist = (ListView) findViewById(R.id.lv_userlist);
+		
+		//初始化带返回按钮的标题栏
+		String strCenterTitle = getResources().getString(R.string.DBDemoActivity);
+		ActionBarManager.initBackTitle(getContext(), getActionBar(), strCenterTitle);
 	}
 
 	@Override
@@ -161,7 +179,7 @@ public class DBDemoActivity extends BaseActivity {
 				String username = et_username.getText().toString();
 				String email = et_email.getText().toString();
 				if(!ToolString.isNoBlankAndNoNull(username) || !ToolString.isNoBlankAndNoNull(email)){
-					ToolAlert.showShort(getContext(), "请输入用户名和邮箱");
+					ToolAlert.toastShort(getContext(), "请输入用户名和邮箱");
 					return ;
 				}
 				
@@ -176,9 +194,35 @@ public class DBDemoActivity extends BaseActivity {
 				user.setEmail(email);
 				userDao.create(user);
 				
+				/**
+				 * 
+				//批处理方法一：（需要确保每一个事物的开启与关闭）
+				DatabaseConnection connection = userDao.startThreadConnection();
+				Savepoint savePoint = null;
+				try {
+				    savePoint = conn.setSavePoint(null);
+				    doInserts(userDao);
+				} finally {
+				    // commit at the end
+				    conn.commit(savePoint);
+				    userDao.endThreadConnection(conn);
+				}
+				
+				//批处理方法二：（不需要确保每一个事物的开启与关闭）
+				userDao.callBatchTasks(new Callable<Void>() {
+
+					@Override
+					public Void call() throws Exception {
+						doInserts(dao);
+				        return null;
+					}
+					
+				});
+				**/
+				
 				//提交事务
 				conn.commit(null);
-				ToolAlert.showShort(getContext(), "添加成功");
+				ToolAlert.toastShort(getContext(), "添加成功");
 				
 				//刷新列表
 				queryUserList();
@@ -212,7 +256,7 @@ public class DBDemoActivity extends BaseActivity {
 				String username = et_u_username.getText().toString();
 				String email = et_u_email.getText().toString();
 				if(!ToolString.isNoBlankAndNoNull(username) || !ToolString.isNoBlankAndNoNull(email)){
-					ToolAlert.showShort(getContext(), "请输入更新用户名和邮箱");
+					ToolAlert.toastShort(getContext(), "请输入更新用户名和邮箱");
 					return ;
 				}
 	           
@@ -228,13 +272,13 @@ public class DBDemoActivity extends BaseActivity {
 					//提交事务
 					conn.commit(null);
 					
-					ToolAlert.showShort(getContext(), "修改成功");
+					ToolAlert.toastShort(getContext(), "修改成功");
 					
 					//刷新列表
 					queryUserList();
 					
 	            }else{
-	            	ToolAlert.showShort(getContext(), "没有选择用户");
+	            	ToolAlert.toastShort(getContext(), "没有选择用户");
 	            }
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -268,7 +312,7 @@ public class DBDemoActivity extends BaseActivity {
 	 * 用户列表适配器
 	 * 
 	 */
-	public class UserListAdapter extends BaseAdapter {
+	public class UserListAdapter extends BaseMAdapter {
 
 		@Override
 		public View getView(final int position, View convertView,
@@ -317,10 +361,10 @@ public class DBDemoActivity extends BaseActivity {
 									mUserListAdapter.notifyDataSetChanged();
 									try {
 										userDao.delete(rowData);
-										ToolAlert.showShort(getContext(), "删除成功");
+										ToolAlert.toastShort(getContext(), "删除成功");
 									} catch (SQLException e) {
 										e.printStackTrace();
-										ToolAlert.showShort(getContext(), "删除失败，原因："+e.getMessage());
+										ToolAlert.toastShort(getContext(), "删除失败，原因："+e.getMessage());
 									}
 								}
 							},

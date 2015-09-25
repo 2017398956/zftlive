@@ -1,7 +1,9 @@
 package com.zftlive.android.sample.popupwindow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,7 +12,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.zftlive.android.R;
-import com.zftlive.android.base.BaseActivity;
+import com.zftlive.android.library.base.BaseActivity;
+import com.zftlive.android.library.common.ActionBarManager;
 
 /**
  * 底部弹出泡泡选择菜单样例
@@ -28,7 +31,18 @@ public class PopDialogMenuActivity extends BaseActivity {
 	public int bindLayout() {
 		return R.layout.activity_pop_dialog;
 	}
+	
+	@Override
+	public View bindView() {
+		return null;
+	}
 
+	@Override
+	public void initParms(Bundle parms) {
+		
+	}
+	
+	@SuppressLint("NewApi")
 	@Override
 	public void initView(View view) {
 
@@ -44,6 +58,10 @@ public class PopDialogMenuActivity extends BaseActivity {
 				popupWindow.showAtLocation(root, Gravity.BOTTOM, 0, 0);
 			}
 		});
+		
+		//初始化带返回按钮的标题栏
+		String strCenterTitle = getResources().getString(R.string.PopDialogMenuActivity);
+		ActionBarManager.initBackTitle(getContext(), getActionBar(), strCenterTitle);
 	}
 
 	@Override

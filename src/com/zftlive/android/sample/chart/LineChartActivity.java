@@ -17,6 +17,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,8 +28,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.zftlive.android.R;
-import com.zftlive.android.base.BaseActivity;
-import com.zftlive.android.tools.ToolUnit;
+import com.zftlive.android.library.base.BaseActivity;
+import com.zftlive.android.library.common.ActionBarManager;
+import com.zftlive.android.library.tools.ToolUnit;
 
 /**
  * 基于AChartEngine绘制的折线图，点击带泡泡提示、可缩放、拖拽
@@ -91,7 +93,18 @@ public class LineChartActivity extends BaseActivity {
 	public int bindLayout() {
 		return R.layout.activity_line_chart;
 	}
+	
+	@Override
+	public View bindView() {
+		return null;
+	}
 
+	@Override
+	public void initParms(Bundle parms) {
+		
+	}
+	
+	@SuppressLint("NewApi")
 	@Override
 	public void initView(View view) {
 
@@ -116,6 +129,9 @@ public class LineChartActivity extends BaseActivity {
 	    mUpRightTipView = LayoutInflater.from(this).inflate(R.layout.chat_tips_up_right, null);
 	    tv_tips_ur = (TextView)mUpRightTipView.findViewById(R.id.tv_tips);
 	    
+		//初始化带返回按钮的标题栏
+		String strCenterTitle = getResources().getString(R.string.LineChartActivity);
+		ActionBarManager.initBackTitle(getContext(), getActionBar(), strCenterTitle);
 	}
 
 	@Override
