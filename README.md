@@ -1,6 +1,6 @@
 # zftlive
 
-这是一个集成目前Android主流优秀第三方组件、优秀好用的自定义控件、实用工具类封装、以及一些APP共通模块（比如：版本更新、意见反馈、引导界面、基础的本地数据库操作、网络通信、图片加载等功能）的开发包，帮助程序员快速开发自己的APP
+这是一个集成目前Android主流优秀第三方组件、优秀好用的自定义控件、实用工具类封装、以及一些APP共通模块（比如：版本更新、意见反馈、引导界面、基础的本地数据库操作、网络通信、图片加载等功能）的开发包，帮助程序员快速开发自己的APP。最新源码已推送[oschina][24]，最新apk请移步至[应用宝][25]、[360手机市场][26]
 
 #如何使用
 
@@ -12,9 +12,10 @@
     - - zftlive最新版本将共性的base/tools/widget抽取成独立类库【AjavaAndroidLib】，主要是方便使用以及维护，sample引用该工程使用。开发者可以直接签出类库工程即可，查看具体如何使用以及相关写法可下载sample
     - 最新代码托管在OSC：
     - - zftlive这个是最初始版本，维护不是那么及时，请根据自己环境下载[Eclipse版本][17]，[AndroidStudio版本][18]；
-    - - AjavaAndroidLib，依赖该类库，在应用**AndroidManifest.xml**配置*MApplication或其子类*即可使用，根据自己环境下载 [Eclipse版本][19]，[AndroidStudio版本][20]；
-    - - AjavaAndroidLib使用Sample工程，请根据自己环境下载：[Eclipse版本][21]，[AndroidStudio版本][22]。
+    - - AjavaAndroidLib，工程引入该类库并且在**AndroidManifest.xml**配置自定义Application为*MApplication或其子类*即可使用，根据自己环境下载 [Eclipse版][19]，[AndroidStudio版][20]；
+    - - AjavaAndroidLib使用Sample工程，请根据自己环境下载：[Eclipse版][21]，[AndroidStudio版][22]。
     - - 直接使用git签出到同一个workspace目录，git如何使用签出工程可以观看作者录制的[教程][23]
+    - 项目具体文档、API以及相关截图，[请点击这里][27]
 
 #集成组件
 
@@ -135,3 +136,7 @@ var Author = {
 [21]: http://git.oschina.net/zftlive/AjavaAndroidSample
 [22]: http://git.oschina.net/zftlive/gradle-ajavasample
 [23]: http://yun.baidu.com/share/link?shareid=1394255543&uk=705493881
+[24]: http://git.oschina.net/zftlive/zftlive/
+[25]: http://android.myapp.com/myapp/detail.htm?apkName=com.zftlive.android
+[26]: http://zhushou.360.cn/detail/index/soft_id/3022355?recrefer=SE_D_ajavasample
+[27]: https://github.com/zengfantian/zftlive/tree/master/doc
