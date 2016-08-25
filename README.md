@@ -21,6 +21,30 @@
     - - AjavaAndroidLib使用Sample工程，请根据自己环境下载：[Eclipse版][21]，[AndroidStudio版][22]。
     - - 直接使用git签出到同一个workspace目录，git如何使用签出工程可以观看作者录制的[教程][23]
     - 更多项目文档/API/相关截图 [请点击这里][27]
+    - 最近类库代码已经提交至[JCenter][30]和[Maven][31]仓库，使用以下代码即可集成引入类库
+
+
+[JCenter][30]仓库
+
+```javascript
+
+compile 'com.zftlive.android.library:basic-framework:1.0.0'
+
+```
+
+[Maven][31]仓库
+
+```javascript
+
+<dependency>
+  <groupId>com.zftlive.android.library</groupId>
+  <artifactId>basic-framework</artifactId>
+  <version>1.0.0</version>
+  <type>pom</type>
+</dependency>
+
+```
+
 
 #集成组件
 
@@ -49,6 +73,8 @@
  - 共通机能-消息推送
  - 共通机能-MTA埋点/异常崩溃监控
  - 共通机能-全程网络状态监听Service
+ - 共通机能-手势解锁
+ - 共通机能-可缩放图片查看器（支持项目工程assets/drawable/sd卡/网络类型的图片）
  - 样例-ActionBar标题栏
  - 样例-底部弹出泡泡菜单
  - 样例-Achartengine带泡泡提示的曲线图
@@ -75,6 +101,10 @@
  - 样例-dialog各种特效DEMO
  - 样例-带数字的进度条
  - 样例-百度地图定位演示
+ - 样例-控制系统音量
+ - 样例-九宫格解锁
+ - 样例-图片缩放查看器
+ - 样例-拍照/相册选择+裁剪图片
  - 未完/待续，敬请关注...
 
 #封装工具类
@@ -103,11 +133,11 @@
 
 #版权声明
 
-本项目源代码开源共享，收集开源项目源代码，融入了个人的理解并给与加工封装，最新正版源代码托管在[OSC][29]，最近同步推送至[github][24]一份，除此之外其他任何渠道方式获取的源代码均不是作者本人共享，并不保证是原著，如需转载请标明出处。另外，项目中涉及第三方平台接入相关key（短信验证码、MTA统计、信鸽推送、百度地图、社会化分享等），由于免费试用的次数有限，为了方便更多的使用者体验，请自行到各自接入平台申请替换
+本项目源代码开源共享，收集开源项目源代码，融入了个人的理解并给与加工封装，最新正版源代码托管在[OSC][29]，最近同步推送至[github][24]一份，除此之外其他任何渠道方式获取的源代码均不是作者本人共享，并不保证是原著，如需转载请标明出处。另外，项目中涉及第三方平台接入相关key（短信验证码、MTA统计、信鸽推送、百度地图、社会化分享等），由于免费试用的次数有限，为了方便更多的使用者体验，在投入自己APP或商业项目使用时，请自行到各自接入平台申请替换
 
 #捐赠共勉
 
-如果您觉得本项目的源代码对您的学习有所帮助，您可以支付宝(左)或微信(右)打赏作者，金额随意
+如果您觉得本项目的源代码对您的学习有所帮助，您可以支付宝(左)或微信(右)请我喝一杯咖啡 
 ![支付宝](http://git.oschina.net/uploads/images/2015/1007/130818_eb22faa0_132591.png "支付宝捐赠")     ![微信](http://git.oschina.net/uploads/images/2015/1007/130906_30154790_132591.png "微信捐赠")
 
 ----------
@@ -130,8 +160,6 @@ var Author = {
 ```
 
 使用过程中有什么问题大家可以加QQ交流群：497671525 ， 加我的QQ也可以，加的时候备注一下，好友有限。看到问题我会及时解答
-
-
 
 [1]: https://github.com/loopj/android-async-http
 [2]: https://github.com/nostra13/Android-Universal-Image-Loader
@@ -162,3 +190,5 @@ var Author = {
 [27]: http://git.oschina.net/zftlive/zftlive/tree/master/doc
 [28]: http://jr.jd.com/
 [29]: http://git.oschina.net/zftlive/zftlive/
+[30]: https://bintray.com/zengfantian/android/basic-framework
+[31]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.zftlive.android.library%22
